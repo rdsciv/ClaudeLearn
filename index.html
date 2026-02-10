@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Learn — Learn · Build · Impact</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Claude Brand Palette ─────────────────────────────────── */
+    :root {
+      --bg:           #eeece2;
+      --bg-warm:      #e8e5d8;
+      --bg-card:      #faf9f5;
+      --bg-terminal:  #1a1714;
+      --bg-terminal-soft: #252118;
+      --text:         #3d3929;
+      --text-muted:   #7a7362;
+      --text-light:   #b0a994;
+      --terra:        #da7756;
+      --terra-dark:   #bd5d3a;
+      --terra-light:  #e8a08a;
+      --terra-glow:   rgba(218, 119, 86, 0.15);
+      --green:        #5a9a6b;
+      --green-soft:   #d4e8d9;
+      --blue:         #5b8fb9;
+      --blue-soft:    #d4e4f0;
+      --yellow:       #c9a227;
+      --yellow-soft:  #f0e8c8;
+      --magenta:      #a66b8f;
+      --red:          #c45454;
+      --red-soft:     #f0d4d4;
+      --white:        #faf9f5;
+
+      --font-heading: 'DM Sans', system-ui, -apple-system, sans-serif;
+      --font-body:    'Source Serif 4', 'Georgia', ui-serif, serif;
+      --font-mono:    'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+      --radius:       12px;
+      --radius-sm:    8px;
+      --shadow:       0 2px 16px rgba(61, 57, 41, 0.08);
+      --shadow-lg:    0 8px 32px rgba(61, 57, 41, 0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Scrollbar ──────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--text-light); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* ─── Layout ─────────────────────────────────────────────── */
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    .header {
+      text-align: center;
+      padding: 3rem 0 2rem;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      background: var(--terra);
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 20px rgba(218, 119, 86, 0.3);
+    }
+
+    .logo-mark svg {
+      width: 36px;
+      height: 36px;
+      fill: white;
+    }
+
+    .header h1 {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .header h1 span {
+      color: var(--terra);
+    }
+
+    .header .tagline {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Status Bar ─────────────────────────────────────────── */
+    .status-bar {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-warm);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .stat-label {
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .xp-bar-container {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .xp-bar {
+      height: 10px;
+      background: var(--bg-warm);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 0.35rem;
+    }
+
+    .xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--terra), var(--terra-light));
+      border-radius: 5px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .badges-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      background: var(--terra-glow);
+      color: var(--terra-dark);
+      letter-spacing: 0.03em;
+    }
+
+    .badge.empty {
+      background: var(--bg-warm);
+      color: var(--text-light);
+    }
+
+    /* ─── Navigation Tabs ────────────────────────────────────── */
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--bg-warm);
+      padding-bottom: 0;
+    }
+
+    .nav-tab {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-tab:hover {
+      color: var(--text);
+    }
+
+    .nav-tab.active {
+      color: var(--terra);
+      border-bottom-color: var(--terra);
+    }
+
+    /* ─── Views ──────────────────────────────────────────────── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ─── Lesson List ────────────────────────────────────────── */
+    .category-title {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin: 2rem 0 0.75rem;
+      padding-left: 0.25rem;
+    }
+
+    .category-title:first-child { margin-top: 0; }
+
+    .lesson-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-warm);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .lesson-card:hover {
+      border-color: var(--terra-light);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-1px);
+    }
+
+    .lesson-card.completed {
+      border-left: 3px solid var(--green);
+    }
+
+    .lesson-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--terra);
+      background: var(--terra-glow);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .lesson-card.completed .lesson-num {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .lesson-info { flex: 1; }
+
+    .lesson-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+    }
+
+    .lesson-meta {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .lesson-xp {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--terra);
+      white-space: nowrap;
+    }
+
+    .lesson-card.completed .lesson-xp {
+      color: var(--green);
+    }
+
+    .check-mark {
+      color: var(--green);
+      font-size: 1.2rem;
+    }
+
+    /* ─── Lesson View ────────────────────────────────────────── */
+    .lesson-view {
+      display: none;
+    }
+
+    .lesson-view.active {
+      display: block;
+    }
+
+    .lesson-header {
+      margin-bottom: 2rem;
+    }
+
+    .back-btn {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--terra);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .back-btn:hover { color: var(--terra-dark); }
+
+    .lesson-view h2 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .lesson-view .lesson-category {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── Terminal Block ─────────────────────────────────────── */
+    .terminal {
+      background: var(--bg-terminal);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .terminal-bar {
+      background: var(--bg-terminal-soft);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .terminal-dot.red { background: #e85d5d; }
+    .terminal-dot.yellow { background: #e8c84d; }
+    .terminal-dot.green { background: #5dc96f; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: #7a7362;
+      margin-left: 0.5rem;
+    }
+
+    .terminal-body {
+      padding: 1.25rem 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: #d4cfbf;
+      overflow-x: auto;
+    }
+
+    .terminal-body .t-heading {
+      color: var(--terra-light);
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: block;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    .terminal-body .t-heading:first-child { margin-top: 0; }
+
+    .terminal-body .t-cmd {
+      color: #7dcea0;
+      display: block;
+      margin: 0.35rem 0;
+      padding-left: 1rem;
+    }
+
+    .terminal-body .t-cmd::before {
+      content: "$ ";
+      color: #5a9a6b;
+    }
+
+    .terminal-body .t-bullet {
+      display: block;
+      margin: 0.2rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .terminal-body .t-bullet::before {
+      content: "→";
+      position: absolute;
+      left: 0.25rem;
+      color: var(--terra-light);
+    }
+
+    .terminal-body .t-note {
+      color: #a89d8a;
+      font-style: italic;
+      display: block;
+      margin: 0.75rem 0;
+    }
+
+    .terminal-body .t-highlight {
+      color: #f0d68a;
+      font-weight: 600;
+    }
+
+    /* ─── Content Prose ──────────────────────────────────────── */
+    .prose {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text);
+    }
+
+    .prose p { margin-bottom: 1rem; }
+
+    .prose strong { font-weight: 600; }
+
+    .prose code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--bg-warm);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      color: var(--terra-dark);
+    }
+
+    /* ─── Quiz Section ───────────────────────────────────────── */
+    .quiz-section {
+      background: var(--bg-card);
+      border: 2px solid var(--bg-warm);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+
+    .quiz-title {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--terra);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .quiz-question {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .quiz-counter {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-option {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      padding: 0.85rem 1.25rem;
+      border: 2px solid var(--bg-warm);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--terra-light);
+      background: var(--terra-glow);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--terra);
+      background: var(--terra-glow);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--green);
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--red);
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .quiz-option.reveal-correct {
+      border-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .quiz-feedback {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-sm);
+      margin: 1rem 0;
+      display: none;
+    }
+
+    .quiz-feedback.correct {
+      background: var(--green-soft);
+      color: #2d5e3a;
+      display: block;
+    }
+
+    .quiz-feedback.wrong {
+      background: var(--red-soft);
+      color: #8b3a3a;
+      display: block;
+    }
+
+    .quiz-next-btn, .quiz-finish-btn {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--terra);
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: none;
+    }
+
+    .quiz-next-btn:hover, .quiz-finish-btn:hover {
+      background: var(--terra-dark);
+    }
+
+    .quiz-next-btn.show, .quiz-finish-btn.show { display: inline-block; }
+
+    /* ─── Results ─────────────────────────────────────────────── */
+    .quiz-results {
+      text-align: center;
+      padding: 2rem 0;
+      display: none;
+    }
+
+    .quiz-results.show { display: block; }
+
+    .results-score {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--terra);
+    }
+
+    .results-label {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .results-msg {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      color: var(--text);
+      margin: 1rem 0;
+    }
+
+    .results-xp {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green);
+      margin: 0.5rem 0;
+    }
+
+    .results-badge {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--yellow);
+      margin: 0.5rem 0;
+    }
+
+    .btn-primary {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--terra);
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 1rem;
+    }
+
+    .btn-primary:hover { background: var(--terra-dark); }
+
+    /* ─── Playground / Ideas Cards ───────────────────────────── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .idea-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-warm);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: all 0.2s;
+    }
+
+    .idea-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .idea-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+    }
+
+    .idea-level {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--terra);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .idea-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin: 0.75rem 0;
+    }
+
+    .idea-prompt {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--bg-terminal);
+      color: #7dcea0;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      margin-top: 0.75rem;
+    }
+
+    /* ─── Animations ─────────────────────────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.4s ease-out;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .pop { animation: pop 0.35s ease; }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .app { padding: 1rem; }
+      .header h1 { font-size: 1.75rem; }
+      .status-bar { flex-direction: column; gap: 1rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .terminal-body { font-size: 0.78rem; padding: 1rem; }
+      .quiz-section { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Header -->
+  <header class="header animate-in">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
+    </div>
+    <h1>Claude <span>Learn</span></h1>
+    <div class="tagline">Learn &middot; Build &middot; Impact</div>
+  </header>
+
+  <!-- Status Bar -->
+  <div class="status-bar" id="statusBar">
+    <div class="stat">
+      <div class="stat-label">Level</div>
+      <div class="stat-value" id="statLevel">1</div>
+    </div>
+    <div class="stat xp-bar-container">
+      <div class="stat-label">Experience — <span id="statXpText">0 / 100 XP</span></div>
+      <div class="xp-bar"><div class="xp-bar-fill" id="xpBarFill" style="width: 0%"></div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Badges</div>
+      <div class="badges-row" id="badgesRow">
+        <span class="badge empty">None yet</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nav Tabs -->
+  <nav class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" data-view="lessons">Lessons</button>
+    <button class="nav-tab" data-view="playground">Playground</button>
+    <button class="nav-tab" data-view="ideas">Impact Ideas</button>
+  </nav>
+
+  <!-- ═══ Lessons View ═══ -->
+  <div class="view active" id="view-lessons"></div>
+
+  <!-- ═══ Lesson Detail ═══ -->
+  <div class="lesson-view" id="lessonDetail"></div>
+
+  <!-- ═══ Playground View ═══ -->
+  <div class="view" id="view-playground">
+    <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Playground</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Hands-on challenges to try right now with Claude Code in your terminal.</p>
+    <div class="card-grid" id="playgroundGrid"></div>
+  </div>
+
+  <!-- ═══ Ideas View ═══ -->
+  <div class="view" id="view-ideas">
+    <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Impact Project Ideas</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Real projects that make a difference. Pick one and build it with Claude Code.</p>
+    <div class="card-grid" id="ideasGrid"></div>
+  </div>
+</div>
+
+<script>
+// ─── Data ────────────────────────────────────────────────────────────
+const lessons = [
+  {
+    id: "intro", num: "01", title: "What is Claude Code?", category: "Foundations", xp: 50, badge: null,
+    terminal: {
+      heading: "Welcome to the world of Claude Code!",
+      body: [
+        { type: "text", text: "Claude Code is an agentic AI coding assistant that lives in your terminal." },
+        { type: "text", text: "It can read your files, write code, run commands, search the web, and work with you to build real software — all through conversation." },
+        { type: "heading", text: "Key Superpowers" },
+        { type: "bullet", text: "Read and understand entire codebases" },
+        { type: "bullet", text: "Write, edit, and refactor code across multiple files" },
+        { type: "bullet", text: "Run terminal commands (build, test, deploy)" },
+        { type: "bullet", text: "Search the web for up-to-date documentation" },
+        { type: "bullet", text: "Plan complex implementations before writing code" },
+        { type: "bullet", text: "Debug errors by reading stack traces and logs" },
+        { type: "note", text: "Think of it as pair programming with an AI that never gets tired, has read billions of lines of code, and genuinely wants to help you build things that matter." },
+      ],
+    },
+    quiz: [
+      { q: "What is Claude Code's primary interface?", options: ["A web browser", "The terminal / command line", "A desktop GUI", "A mobile app"], answer: 1, explanation: "Claude Code lives in your terminal. You interact with it through natural conversation right in your CLI." },
+      { q: "Which of these can Claude Code NOT do?", options: ["Read and write files", "Run terminal commands", "Physically build hardware", "Search the web"], answer: 2, explanation: "Claude Code is a software tool — it can do incredible things with code and commands, but hardware is still on you!" },
+    ],
+  },
+  {
+    id: "getting-started", num: "02", title: "Getting Started & First Commands", category: "Foundations", xp: 75, badge: "Launcher",
+    terminal: {
+      heading: "Launching Claude Code",
+      body: [
+        { type: "text", text: "To start Claude Code, open your terminal and type:" },
+        { type: "cmd", text: "claude" },
+        { type: "heading", text: "Starting a Conversation" },
+        { type: "cmd", text: "claude" },
+        { type: "text", text: "  Start interactive mode" },
+        { type: "cmd", text: 'claude "fix the login bug"' },
+        { type: "text", text: "  Start with a specific task" },
+        { type: "cmd", text: "claude -r" },
+        { type: "text", text: "  Resume your last conversation" },
+        { type: "heading", text: "Slash Commands" },
+        { type: "bullet", text: "/help — Show all available commands" },
+        { type: "bullet", text: "/clear — Clear conversation history" },
+        { type: "bullet", text: "/compact — Summarize conversation to save context" },
+        { type: "bullet", text: "/cost — See token usage and costs" },
+        { type: "heading", text: "Pro Tip: Unix Pipes" },
+        { type: "cmd", text: 'cat error.log | claude "explain this error"' },
+        { type: "cmd", text: 'git diff | claude "review these changes"' },
+      ],
+    },
+    quiz: [
+      { q: "How do you resume your last Claude Code conversation?", options: ["claude --last", "claude -r", "claude resume", "claude --continue"], answer: 1, explanation: "The -r flag (short for --resume) picks up exactly where you left off." },
+      { q: 'What does the "/compact" command do?', options: ["Makes the terminal smaller", "Compresses your files", "Summarizes conversation to save context", "Deletes old messages"], answer: 2, explanation: "/compact summarizes the conversation so far, freeing up context window space for longer sessions." },
+    ],
+  },
+  {
+    id: "reading-code", num: "03", title: "Exploring & Understanding Code", category: "Core Skills", xp: 75, badge: null,
+    terminal: {
+      heading: "Let Claude Code Be Your Codebase Guide",
+      body: [
+        { type: "text", text: "One of Claude Code's greatest strengths is understanding existing code. You don't need to explain your project — just ask." },
+        { type: "heading", text: "Try Asking" },
+        { type: "cmd", text: '"What does this codebase do?"' },
+        { type: "cmd", text: '"How is authentication handled?"' },
+        { type: "cmd", text: '"Walk me through the data flow from API to UI"' },
+        { type: "heading", text: "How Claude Code Explores" },
+        { type: "bullet", text: "Glob — Finds files by name patterns (e.g., all *.tsx files)" },
+        { type: "bullet", text: "Grep — Searches file contents for specific code" },
+        { type: "bullet", text: "Read — Opens and reads specific files" },
+        { type: "bullet", text: "Bash — Runs commands like git log, tree, etc." },
+        { type: "heading", text: "Great For" },
+        { type: "bullet", text: "Onboarding onto new projects" },
+        { type: "bullet", text: "Understanding legacy code" },
+        { type: "bullet", text: "Finding where a bug might live" },
+        { type: "bullet", text: "Learning how open-source projects work" },
+      ],
+    },
+    quiz: [
+      { q: "What's a great first question to ask Claude Code about a new codebase?", options: ['"Delete everything and start over"', '"What does this codebase do?"', '"Write me a new app"', '"How many lines of code are there?"'], answer: 1, explanation: 'Asking "What does this codebase do?" lets Claude explore and give you a high-level understanding.' },
+      { q: "Which tool does Claude Code use to search inside file contents?", options: ["Glob", "Read", "Grep", "Find"], answer: 2, explanation: "Grep searches file contents for patterns. Glob finds files by name. Read opens specific files." },
+    ],
+  },
+  {
+    id: "writing-code", num: "04", title: "Writing & Editing Code", category: "Core Skills", xp: 100, badge: "Builder",
+    terminal: {
+      heading: "Building With Claude Code",
+      body: [
+        { type: "text", text: "Claude Code doesn't just talk about code — it writes it. It can create new files, edit existing ones, and refactor across your entire project." },
+        { type: "heading", text: "Creating New Code" },
+        { type: "cmd", text: '"Create a REST API endpoint for user registration"' },
+        { type: "cmd", text: '"Add a React component for a search bar with autocomplete"' },
+        { type: "cmd", text: '"Write a Python script that processes CSV files"' },
+        { type: "heading", text: "Editing Existing Code" },
+        { type: "cmd", text: '"Add input validation to the signup form"' },
+        { type: "cmd", text: '"Refactor this function to use async/await"' },
+        { type: "cmd", text: '"Fix the SQL injection vulnerability in the login query"' },
+        { type: "heading", text: "How It Works" },
+        { type: "bullet", text: "Claude reads the relevant files first (context is key!)" },
+        { type: "bullet", text: "Uses Edit for surgical changes to existing files" },
+        { type: "bullet", text: "Uses Write for creating new files" },
+        { type: "bullet", text: "You review the diff and approve or request changes" },
+        { type: "heading", text: "Best Practices" },
+        { type: "bullet", text: "Be specific about what you want" },
+        { type: "bullet", text: "Mention the language/framework if it matters" },
+        { type: "bullet", text: "Ask Claude to follow existing patterns in your codebase" },
+        { type: "bullet", text: "Review changes before committing — you're still the pilot!" },
+      ],
+    },
+    quiz: [
+      { q: "What should Claude Code do BEFORE editing a file?", options: ["Delete the old version", "Read the file to understand existing code", "Create a backup in the cloud", "Ask permission from GitHub"], answer: 1, explanation: "Claude Code always reads files first to understand the existing code and patterns before making changes." },
+      { q: "What's the best way to get good results from Claude Code?", options: ['Just say "write some code"', "Be specific about what you want and mention the framework", "Let Claude guess everything", "Only use single-word commands"], answer: 1, explanation: "Specificity is key. The more context you give, the better the output." },
+    ],
+  },
+  {
+    id: "debugging", num: "05", title: "Debugging Like a Pro", category: "Core Skills", xp: 100, badge: "Debugger",
+    terminal: {
+      heading: "Debugging With Claude Code",
+      body: [
+        { type: "text", text: "Debugging is where Claude Code truly shines. Instead of staring at stack traces alone, you have an AI partner who can trace through your code and find the root cause." },
+        { type: "heading", text: "Strategies" },
+        { type: "bullet", text: "Share the error with context about what you were doing" },
+        { type: "bullet", text: "Pipe logs directly into Claude Code" },
+        { type: "bullet", text: "Ask Claude to investigate a user-reported issue" },
+        { type: "bullet", text: 'Tell Claude: "Run the tests, find what\'s broken, and fix it"' },
+        { type: "heading", text: "Claude's Debugging Process" },
+        { type: "bullet", text: "Reads the error message and relevant code" },
+        { type: "bullet", text: "Traces the execution path" },
+        { type: "bullet", text: "Identifies the root cause (not just the symptom)" },
+        { type: "bullet", text: "Proposes and implements a fix" },
+        { type: "bullet", text: "Can run tests to verify the fix works" },
+        { type: "heading", text: "Example" },
+        { type: "cmd", text: 'npm test 2>&1 | claude "why are these tests failing?"' },
+        { type: "note", text: "Pro tip: Don't just paste errors — give context about what you were trying to do." },
+      ],
+    },
+    quiz: [
+      { q: "What's the most helpful thing to share with Claude Code when debugging?", options: ["Just the error message", "The error message plus context about what you were doing", 'Just say "it\'s broken"', "A screenshot of your confused face"], answer: 1, explanation: "Error message + context = faster debugging. Claude narrows down the issue much faster with both." },
+      { q: "How can you pipe test output directly to Claude Code?", options: ["Copy-paste only", 'npm test | claude "why are these failing?"', "You can't pipe to Claude Code", "Email the logs"], answer: 1, explanation: "Unix pipes work great with Claude Code! Pipe any command output directly into a prompt." },
+    ],
+  },
+  {
+    id: "git-workflow", num: "06", title: "Git & Version Control", category: "Workflows", xp: 100, badge: null,
+    terminal: {
+      heading: "Git Workflow With Claude Code",
+      body: [
+        { type: "text", text: "Claude Code integrates beautifully with Git, making version control less tedious and more thoughtful." },
+        { type: "heading", text: "Committing Changes" },
+        { type: "cmd", text: '"commit these changes with a descriptive message"' },
+        { type: "text", text: "  Claude reads the diff, understands the changes, and writes a meaningful commit message." },
+        { type: "heading", text: "Code Review" },
+        { type: "cmd", text: 'git diff | claude "review these changes for issues"' },
+        { type: "cmd", text: '"review the last 3 commits for potential bugs"' },
+        { type: "heading", text: "Pull Requests" },
+        { type: "cmd", text: '"create a PR with a summary of all changes on this branch"' },
+        { type: "heading", text: "Safety Practices" },
+        { type: "bullet", text: "Never force-pushes unless you explicitly ask" },
+        { type: "bullet", text: "Creates new commits instead of amending by default" },
+        { type: "bullet", text: "Warns about sensitive files (.env, credentials)" },
+        { type: "bullet", text: 'Stages specific files rather than using "git add -A"' },
+      ],
+    },
+    quiz: [
+      { q: "What does Claude Code do when you ask it to commit?", options: ['Always uses "fix stuff" as the message', "Reads the diff and writes a meaningful commit message", "Pushes directly to main", "Deletes the branch"], answer: 1, explanation: "Claude reads the actual changes to write descriptive, meaningful commit messages." },
+      { q: "Which is a safety practice Claude Code follows with Git?", options: ["Force-pushing to main automatically", "Never staging files", "Warning about committing sensitive files like .env", "Deleting old branches automatically"], answer: 2, explanation: "Claude Code is careful with sensitive files and will warn you before committing .env or credentials." },
+    ],
+  },
+  {
+    id: "planning", num: "07", title: "Planning Before Building", category: "Workflows", xp: 75, badge: "Architect",
+    terminal: {
+      heading: "Plan Mode: Think Before You Code",
+      body: [
+        { type: "text", text: "For complex tasks, Claude Code has a Plan Mode that lets you design the approach before writing a single line of code." },
+        { type: "heading", text: "When to Use Plan Mode" },
+        { type: "bullet", text: "New features with multiple components" },
+        { type: "bullet", text: "Refactoring that touches many files" },
+        { type: "bullet", text: "Architectural decisions (which library? what pattern?)" },
+        { type: "bullet", text: "When you want to discuss trade-offs first" },
+        { type: "heading", text: "How It Works" },
+        { type: "bullet", text: "1. You describe what you want to build" },
+        { type: "bullet", text: "2. Claude explores the codebase and existing patterns" },
+        { type: "bullet", text: "3. It creates a step-by-step implementation plan" },
+        { type: "bullet", text: "4. You review, ask questions, request changes" },
+        { type: "bullet", text: "5. Once approved, Claude executes the plan" },
+        { type: "note", text: "This prevents wasted effort — you align on the approach before any code is written." },
+      ],
+    },
+    quiz: [
+      { q: "When should you use Plan Mode?", options: ["For fixing a typo", "For complex features that touch multiple files", "Never — just start coding", "Only for documentation"], answer: 1, explanation: "Plan Mode shines for complex tasks. For a simple typo fix, just ask Claude directly." },
+      { q: "What happens after you approve a plan?", options: ["Nothing — you code it yourself", "Claude executes the plan and writes the code", "The plan is emailed to your team", "Claude deletes the plan"], answer: 1, explanation: "Once you approve, Claude implements the plan step by step, writing real code." },
+    ],
+  },
+  {
+    id: "impact-projects", num: "08", title: "Building for Impact", category: "Making a Difference", xp: 150, badge: "Changemaker",
+    terminal: {
+      heading: "Code That Changes the World",
+      body: [
+        { type: "text", text: "Now that you know how to use Claude Code, let's talk about what to build. Here are real domains where your code can make a tangible difference:" },
+        { type: "heading", text: "1. Accessibility" },
+        { type: "text", text: "  Build tools that make the web usable for everyone." },
+        { type: "heading", text: "2. Education" },
+        { type: "text", text: "  Create learning platforms, tutoring tools, or study aids." },
+        { type: "heading", text: "3. Health & Wellness" },
+        { type: "text", text: "  Apps for tracking health, connecting patients, or managing care." },
+        { type: "heading", text: "4. Environment" },
+        { type: "text", text: "  Tools for tracking carbon footprints, waste, or conservation." },
+        { type: "heading", text: "5. Community & Civic Tech" },
+        { type: "text", text: "  Platforms that connect neighbors, manage volunteers, or track issues." },
+        { type: "heading", text: "6. Open Source" },
+        { type: "text", text: "  Contributing to open source amplifies your impact exponentially." },
+        { type: "note", text: "The best part? Claude Code makes all of these achievable, even if you're just starting out. You describe the vision, and together you build it step by step." },
+      ],
+    },
+    quiz: [
+      { q: "What's a great way to maximize your impact as a developer?", options: ["Only build proprietary software", "Contributing to open source projects", "Keep all your code private", "Never share your work"], answer: 1, explanation: "Open source contributions multiply your impact — your code helps people you'll never meet." },
+      { q: "Can Claude Code help build accessibility features?", options: ["No, accessibility is too specialized", "Yes — it can add ARIA labels, keyboard navigation, and more", "Only for mobile apps", "Only if you know all the ARIA specs"], answer: 1, explanation: "Claude Code knows accessibility standards well and can help you add ARIA labels, keyboard nav, screen reader support, and more." },
+    ],
+  },
+];
+
+const playgroundChallenges = [
+  { title: "Hello World API", desc: "Create a simple Express.js API with a GET /hello endpoint, then add a POST /greet endpoint that takes a name.", prompt: '"Create a simple Express.js API with a GET /hello endpoint that returns { message: \'Hello, World!\' }"' },
+  { title: "Bug Hunt", desc: "Create a file with an intentional bug (off-by-one, null reference, etc.), then ask Claude to find it.", prompt: '"There\'s a bug in this file. Can you find it?"' },
+  { title: "Code Review Partner", desc: "Use Claude Code to review your recent code changes for bugs, security issues, and improvement opportunities.", prompt: 'git diff HEAD~3 | claude "review these changes for bugs and security issues"' },
+  { title: "Build an Impact Tool", desc: "Challenge yourself to build something meaningful — a hydration tracker, expense categorizer, or anything that helps.", prompt: '"Help me create a CLI tool that tracks my daily water intake and reminds me to stay hydrated"' },
+];
+
+const impactIdeas = [
+  { title: "Neighborhood Helper", level: "Beginner", desc: "A web app where neighbors can post requests for help (groceries, rides) and others can volunteer.", prompt: '"Create a simple web app where people can post help requests and others can claim them"' },
+  { title: "Accessibility Checker", level: "Intermediate", desc: "A CLI tool that scans HTML files and reports accessibility issues with suggested fixes.", prompt: '"Build a Node.js CLI tool that checks HTML files for common accessibility issues"' },
+  { title: "Study Buddy", level: "Beginner", desc: "A flashcard app with spaced repetition to help students study more effectively.", prompt: '"Create a flashcard study app with spaced repetition using React"' },
+  { title: "Carbon Footprint Tracker", level: "Intermediate", desc: "Track daily activities and estimate their carbon impact with tips for reduction.", prompt: '"Build a carbon footprint calculator that tracks daily activities"' },
+  { title: "Community Food Map", level: "Advanced", desc: "Map food banks, community gardens, and free meal programs in your area.", prompt: '"Create a map-based app showing local food resources like food banks and community gardens"' },
+  { title: "Mental Health Check-In", level: "Beginner", desc: "A simple daily mood tracker with journaling prompts and positive affirmations.", prompt: '"Build a daily mood tracker app with journaling prompts"' },
+];
+
+// ─── State ───────────────────────────────────────────────────────────
+const STORAGE_KEY = "claude-learn-progress";
+
+function loadProgress() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return { completedLessons: [], xp: 0, level: 1, badges: [] };
+}
+
+function saveProgress(p) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+}
+
+let progress = loadProgress();
+
+// ─── Rendering ───────────────────────────────────────────────────────
+function renderStatusBar() {
+  const xpForNext = progress.level * 100;
+  const pct = Math.min(100, Math.floor((progress.xp / xpForNext) * 100));
+  document.getElementById("statLevel").textContent = progress.level;
+  document.getElementById("statXpText").textContent = `${progress.xp} / ${xpForNext} XP`;
+  document.getElementById("xpBarFill").style.width = pct + "%";
+
+  const row = document.getElementById("badgesRow");
+  if (progress.badges.length === 0) {
+    row.innerHTML = '<span class="badge empty">None yet</span>';
+  } else {
+    row.innerHTML = progress.badges.map(b => `<span class="badge">${b}</span>`).join("");
+  }
+}
+
+function renderLessons() {
+  const container = document.getElementById("view-lessons");
+  let html = "";
+  let lastCat = "";
+  for (const lesson of lessons) {
+    if (lesson.category !== lastCat) {
+      lastCat = lesson.category;
+      html += `<div class="category-title">${lesson.category}</div>`;
+    }
+    const done = progress.completedLessons.includes(lesson.id);
+    html += `
+      <div class="lesson-card ${done ? 'completed' : ''} animate-in" onclick="openLesson('${lesson.id}')">
+        <div class="lesson-num">${lesson.num}</div>
+        <div class="lesson-info">
+          <div class="lesson-title">${lesson.title}</div>
+          <div class="lesson-meta">${lesson.category}${lesson.badge ? ' &middot; Badge: ' + lesson.badge : ''}</div>
+        </div>
+        ${done ? '<span class="check-mark">&#10003;</span>' : ''}
+        <div class="lesson-xp">${done ? 'Done' : lesson.xp + ' XP'}</div>
+      </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function renderPlayground() {
+  document.getElementById("playgroundGrid").innerHTML = playgroundChallenges.map(c => `
+    <div class="idea-card">
+      <h3>${c.title}</h3>
+      <div class="idea-desc">${c.desc}</div>
+      <div class="idea-prompt">${c.prompt}</div>
+    </div>`).join("");
+}
+
+function renderIdeas() {
+  document.getElementById("ideasGrid").innerHTML = impactIdeas.map(i => `
+    <div class="idea-card">
+      <h3>${i.title}</h3>
+      <span class="idea-level">${i.level}</span>
+      <div class="idea-desc">${i.desc}</div>
+      <div class="idea-prompt">${i.prompt}</div>
+    </div>`).join("");
+}
+
+function renderTerminal(terminal) {
+  let body = "";
+  for (const item of terminal.body) {
+    switch (item.type) {
+      case "heading": body += `<span class="t-heading">${item.text}</span>`; break;
+      case "cmd":     body += `<span class="t-cmd">${item.text}</span>`; break;
+      case "bullet":  body += `<span class="t-bullet">${item.text}</span>`; break;
+      case "note":    body += `<span class="t-note">${item.text}</span>`; break;
+      default:        body += `<span style="display:block;margin:0.3rem 0">${item.text}</span>`;
+    }
+  }
+
+  return `
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+        <span class="terminal-title">claude-learn</span>
+      </div>
+      <div class="terminal-body">
+        <span class="t-heading">${terminal.heading}</span>
+        ${body}
+      </div>
+    </div>`;
+}
+
+// ─── Lesson Detail & Quiz ────────────────────────────────────────────
+let currentQuiz = { lessonId: null, qIndex: 0, correct: 0, answered: false };
+
+function openLesson(id) {
+  const lesson = lessons.find(l => l.id === id);
+  if (!lesson) return;
+
+  currentQuiz = { lessonId: id, qIndex: 0, correct: 0, answered: false };
+
+  document.getElementById("view-lessons").style.display = "none";
+  document.getElementById("navTabs").style.display = "none";
+  document.getElementById("statusBar").style.display = "none";
+
+  const detail = document.getElementById("lessonDetail");
+  detail.className = "lesson-view active animate-in";
+
+  detail.innerHTML = `
+    <div class="lesson-header">
+      <button class="back-btn" onclick="closeLesson()">&larr; Back to Lessons</button>
+      <h2>${lesson.num} &mdash; ${lesson.title}</h2>
+      <div class="lesson-category">${lesson.category} &middot; ${lesson.xp} XP${lesson.badge ? ' &middot; Badge: ' + lesson.badge : ''}</div>
+    </div>
+    ${renderTerminal(lesson.terminal)}
+    <div class="quiz-section" id="quizSection">
+      <div class="quiz-title">&#9889; Quiz Time</div>
+      <div id="quizContent"></div>
+      <div class="quiz-results" id="quizResults"></div>
+    </div>`;
+
+  renderQuizQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderQuizQuestion() {
+  const lesson = lessons.find(l => l.id === currentQuiz.lessonId);
+  const q = lesson.quiz[currentQuiz.qIndex];
+  const isLast = currentQuiz.qIndex === lesson.quiz.length - 1;
+  const content = document.getElementById("quizContent");
+
+  content.innerHTML = `
+    <div class="quiz-counter">Question ${currentQuiz.qIndex + 1} of ${lesson.quiz.length}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options" id="quizOptions">
+      ${q.options.map((opt, i) => `<button class="quiz-option" data-idx="${i}" onclick="selectAnswer(${i})">${String.fromCharCode(65 + i)}) ${opt}</button>`).join("")}
+    </div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    ${isLast
+      ? '<button class="quiz-finish-btn" id="quizNextBtn" onclick="finishQuiz()">See Results</button>'
+      : '<button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuestion()">Next Question</button>'
+    }`;
+
+  currentQuiz.answered = false;
+}
+
+function selectAnswer(idx) {
+  if (currentQuiz.answered) return;
+  currentQuiz.answered = true;
+
+  const lesson = lessons.find(l => l.id === currentQuiz.lessonId);
+  const q = lesson.quiz[currentQuiz.qIndex];
+  const correct = idx === q.answer;
+  if (correct) currentQuiz.correct++;
+
+  const options = document.querySelectorAll("#quizOptions .quiz-option");
+  options.forEach((btn, i) => {
+    btn.style.pointerEvents = "none";
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && !correct) btn.classList.add("wrong");
+  });
+
+  const fb = document.getElementById("quizFeedback");
+  fb.className = `quiz-feedback ${correct ? "correct" : "wrong"}`;
+  fb.innerHTML = `<strong>${correct ? "Correct!" : "Not quite."}</strong> ${q.explanation}`;
+
+  document.getElementById("quizNextBtn").classList.add("show");
+}
+
+function nextQuestion() {
+  currentQuiz.qIndex++;
+  currentQuiz.answered = false;
+  renderQuizQuestion();
+}
+
+function finishQuiz() {
+  const lesson = lessons.find(l => l.id === currentQuiz.lessonId);
+  const score = Math.round((currentQuiz.correct / lesson.quiz.length) * 100);
+  const alreadyDone = progress.completedLessons.includes(lesson.id);
+
+  let xpEarned = 0;
+  let newBadge = null;
+  let leveledUp = false;
+
+  if (!alreadyDone) {
+    xpEarned = score === 100 ? lesson.xp : Math.floor(lesson.xp * 0.5);
+    progress.xp += xpEarned;
+    progress.completedLessons.push(lesson.id);
+    if (lesson.badge) {
+      progress.badges.push(lesson.badge);
+      newBadge = lesson.badge;
+    }
+    while (progress.xp >= progress.level * 100) {
+      progress.xp -= progress.level * 100;
+      progress.level++;
+      leveledUp = true;
+    }
+    saveProgress(progress);
+  }
+
+  document.getElementById("quizContent").style.display = "none";
+  const results = document.getElementById("quizResults");
+  results.className = "quiz-results show animate-in";
+
+  let msg = score === 100 ? "Perfect score! You nailed it!" : score >= 50 ? "Good job! Keep it up!" : "Keep learning! Review and try again.";
+
+  results.innerHTML = `
+    <div class="results-label">Your Score</div>
+    <div class="results-score pop">${score}%</div>
+    <div class="results-msg">${msg}</div>
+    ${xpEarned ? `<div class="results-xp pop">+${xpEarned} XP</div>` : '<div style="color: var(--text-muted); font-size: 0.9rem;">Already completed</div>'}
+    ${newBadge ? `<div class="results-badge pop">New Badge: ${newBadge}</div>` : ''}
+    ${leveledUp ? `<div class="results-badge pop" style="color: var(--terra);">Level Up! You are now Level ${progress.level}</div>` : ''}
+    <button class="btn-primary" onclick="closeLesson()">Back to Lessons</button>`;
+}
+
+function closeLesson() {
+  document.getElementById("lessonDetail").className = "lesson-view";
+  document.getElementById("view-lessons").style.display = "block";
+  document.getElementById("navTabs").style.display = "flex";
+  document.getElementById("statusBar").style.display = "flex";
+  renderStatusBar();
+  renderLessons();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ─── Tab Navigation ──────────────────────────────────────────────────
+document.querySelectorAll(".nav-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("view-" + tab.dataset.view).classList.add("active");
+  });
+});
+
+// ─── Init ────────────────────────────────────────────────────────────
+renderStatusBar();
+renderLessons();
+renderPlayground();
+renderIdeas();
+</script>
+</body>
+</html>

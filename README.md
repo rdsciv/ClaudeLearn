@@ -27,6 +27,10 @@ node learn.mjs
 
 No dependencies required — just Node.js (v18+).
 
+### Web Version
+
+Open `index.html` in your browser for a beautifully styled web experience with Claude's brand colors, typography, and interactive quizzes — identical for everyone.
+
 ## What's Inside
 
 ### 8 Interactive Lessons
