@@ -675,6 +675,7 @@ async function mainMenu(rl, progress) {
     console.log();
   }
 
+  console.log(`  ${c.yellow}T${c.reset}  Tips & Tutorials — Pro tips with walkthroughs`);
   console.log(`  ${c.yellow}P${c.reset}  Playground — Try a hands-on challenge`);
   console.log(`  ${c.yellow}I${c.reset}  Impact Ideas — Project ideas for good`);
   console.log(`  ${c.yellow}Q${c.reset}  Quit\n`);
@@ -684,6 +685,7 @@ async function mainMenu(rl, progress) {
     .toUpperCase();
 
   if (choice === "Q") return "quit";
+  if (choice === "T") return "tips";
   if (choice === "P") return "playground";
   if (choice === "I") return "ideas";
 
@@ -693,6 +695,298 @@ async function mainMenu(rl, progress) {
   }
 
   return "invalid";
+}
+
+// ─── Tips & Tutorials ───────────────────────────────────────────────
+const tips = [
+  {
+    id: "drag-drop",
+    title: "Drag & Drop Images Into Your Terminal",
+    category: "Hidden Gems",
+    icon: "~",
+    tutorial: `
+${c.bold}${c.cyan}Did you know? You can drag and drop image files directly
+into Claude Code's terminal input!${c.reset}
+
+${c.yellow}How it works:${c.reset}
+  1. Start Claude Code in your terminal
+  2. Grab any image file (screenshot, mockup, diagram, photo)
+  3. Drag it from Finder / file manager into the terminal window
+  4. The file path gets pasted automatically
+  5. Claude Code reads the image and understands it visually!
+
+${c.yellow}Try these:${c.reset}
+  ${c.green}* Drag a screenshot of a UI bug:${c.reset}
+    "What's wrong with this layout?" + [drag image]
+
+  ${c.green}* Drag a design mockup:${c.reset}
+    "Build this UI in React" + [drag image]
+
+  ${c.green}* Drag a whiteboard photo:${c.reset}
+    "Turn this diagram into a database schema" + [drag image]
+
+  ${c.green}* Drag an error screenshot:${c.reset}
+    "Help me fix this error" + [drag image]
+
+${c.magenta}This is incredibly powerful for bridging the gap between
+visual ideas and working code.${c.reset}
+`,
+  },
+  {
+    id: "multi-turn",
+    title: "Iterate Like a Conversation",
+    category: "Hidden Gems",
+    icon: "~",
+    tutorial: `
+${c.bold}${c.cyan}Claude Code remembers everything in your session.
+Use that to iterate naturally!${c.reset}
+
+${c.yellow}Example conversation flow:${c.reset}
+  ${c.green}You:${c.reset}   "Create a login form component"
+  ${c.dim}Claude builds the form${c.reset}
+  ${c.green}You:${c.reset}   "Add email validation"
+  ${c.dim}Claude updates the same component${c.reset}
+  ${c.green}You:${c.reset}   "Now add a password strength meter"
+  ${c.dim}Claude adds it, keeping previous changes${c.reset}
+  ${c.green}You:${c.reset}   "Make it match our existing dark theme"
+  ${c.dim}Claude reads your theme and applies it${c.reset}
+
+${c.yellow}Tips for great iteration:${c.reset}
+  ${c.green}*${c.reset} Start broad, then refine with follow-ups
+  ${c.green}*${c.reset} Say "undo that last change" if something isn't right
+  ${c.green}*${c.reset} Reference previous work: "update the component we just made"
+  ${c.green}*${c.reset} Use /compact if the conversation gets very long
+`,
+  },
+  {
+    id: "claude-md",
+    title: "Project Memory with CLAUDE.md",
+    category: "Power User",
+    icon: "~",
+    tutorial: `
+${c.bold}${c.cyan}Create a CLAUDE.md file in your project root to give
+Claude Code persistent context about your project!${c.reset}
+
+${c.yellow}What to put in CLAUDE.md:${c.reset}
+  ${c.green}*${c.reset} Project architecture overview
+  ${c.green}*${c.reset} Coding conventions and style preferences
+  ${c.green}*${c.reset} Key file locations and their purposes
+  ${c.green}*${c.reset} Build and test commands
+  ${c.green}*${c.reset} Things to avoid or watch out for
+
+${c.yellow}Example CLAUDE.md:${c.reset}
+${c.dim}  # My Project
+  - React frontend in /src, Express backend in /api
+  - Use TypeScript strict mode
+  - Tests go next to source files as *.test.ts
+  - Run tests: npm test
+  - Prefer functional components with hooks
+  - Never use "any" type${c.reset}
+
+${c.magenta}Claude Code reads this automatically every session,
+so it always knows your project's rules and preferences.${c.reset}
+`,
+  },
+  {
+    id: "vim-mode",
+    title: "Keyboard Shortcuts & Vim Mode",
+    category: "Power User",
+    icon: "~",
+    tutorial: `
+${c.bold}${c.cyan}Speed up your Claude Code workflow with shortcuts!${c.reset}
+
+${c.yellow}Essential shortcuts:${c.reset}
+  ${c.green}Escape${c.reset}          Clear current input / interrupt
+  ${c.green}Ctrl+C${c.reset}          Cancel current operation
+  ${c.green}Up/Down${c.reset}         Navigate input history
+  ${c.green}Shift+Enter${c.reset}     Multi-line input (newline without sending)
+
+${c.yellow}Vim mode:${c.reset}
+  Claude Code supports Vim keybindings for text input!
+  If you're a Vim user, this feels right at home.
+
+${c.yellow}Multi-line input trick:${c.reset}
+  For long prompts, use Shift+Enter to write across
+  multiple lines before sending. Great for detailed
+  instructions with examples or step-by-step requests.
+
+${c.magenta}Tip: Customize keybindings with /keybindings-help${c.reset}
+`,
+  },
+  {
+    id: "piping",
+    title: "Unix Pipes — Claude's Secret Weapon",
+    category: "Workflow",
+    icon: "~",
+    tutorial: `
+${c.bold}${c.cyan}Pipe any command output directly into Claude Code!${c.reset}
+
+${c.yellow}Debugging:${c.reset}
+  ${c.green}$ npm test 2>&1 | claude "why are these tests failing?"${c.reset}
+  ${c.green}$ python app.py 2>&1 | claude "explain this traceback"${c.reset}
+  ${c.green}$ docker logs myapp | claude "find errors in these logs"${c.reset}
+
+${c.yellow}Code review:${c.reset}
+  ${c.green}$ git diff | claude "review for bugs and security issues"${c.reset}
+  ${c.green}$ git log --oneline -20 | claude "summarize recent changes"${c.reset}
+
+${c.yellow}Understanding code:${c.reset}
+  ${c.green}$ cat schema.sql | claude "explain this database schema"${c.reset}
+  ${c.green}$ curl -s api.example.com | claude "what does this API return?"${c.reset}
+
+${c.yellow}Generate code from specs:${c.reset}
+  ${c.green}$ cat requirements.md | claude "build this feature"${c.reset}
+
+${c.magenta}Pipes + Claude = any command output becomes actionable.${c.reset}
+`,
+  },
+  {
+    id: "headless",
+    title: "Headless Mode for Automation",
+    category: "Workflow",
+    icon: "~",
+    tutorial: `
+${c.bold}${c.cyan}Run Claude Code non-interactively for scripts and CI/CD!${c.reset}
+
+${c.yellow}Headless mode with --print:${c.reset}
+  ${c.green}$ claude --print "generate a .gitignore for a Node.js project"${c.reset}
+  This outputs the result directly to stdout — no interactive
+  session needed. Perfect for piping into files:
+  ${c.green}$ claude --print "generate .gitignore for Node.js" > .gitignore${c.reset}
+
+${c.yellow}Use in scripts:${c.reset}
+  ${c.green}#!/bin/bash
+  # Auto-generate commit messages
+  MSG=$(git diff --staged | claude --print "write a commit message for this diff")
+  git commit -m "$MSG"${c.reset}
+
+${c.yellow}Use in CI/CD:${c.reset}
+  ${c.green}# In your GitHub Action or CI pipeline:
+  claude --print "review this PR for issues" < changes.diff${c.reset}
+
+${c.magenta}Headless mode turns Claude Code into a building block
+for automated workflows.${c.reset}
+`,
+  },
+  {
+    id: "context-tricks",
+    title: "Context Window Mastery",
+    category: "Power User",
+    icon: "~",
+    tutorial: `
+${c.bold}${c.cyan}Get the most out of Claude Code's context window!${c.reset}
+
+${c.yellow}The challenge:${c.reset}
+  Claude Code has a large but finite context window. On long
+  sessions, you might hit the limit.
+
+${c.yellow}Strategies:${c.reset}
+  ${c.green}1. /compact${c.reset}
+     Summarizes your conversation so far. Use this periodically
+     during long sessions to free up space.
+
+  ${c.green}2. Be specific about files${c.reset}
+     Instead of "look at the project", say
+     "look at src/auth/login.ts" — this avoids loading
+     unnecessary files into context.
+
+  ${c.green}3. Start fresh for new tasks${c.reset}
+     If switching to an unrelated task, start a new session
+     rather than continuing a long one.
+
+  ${c.green}4. Use CLAUDE.md${c.reset}
+     Put recurring context in CLAUDE.md so you don't have to
+     re-explain your project setup every session.
+
+  ${c.green}5. Break big tasks into steps${c.reset}
+     Instead of "refactor the entire auth system", do it
+     module by module across sessions.
+
+${c.magenta}Treat context like memory — keep it focused on what matters now.${c.reset}
+`,
+  },
+  {
+    id: "mcp",
+    title: "MCP Servers — Extend Claude's Powers",
+    category: "Advanced",
+    icon: "~",
+    tutorial: `
+${c.bold}${c.cyan}MCP (Model Context Protocol) lets Claude Code connect
+to external tools and services!${c.reset}
+
+${c.yellow}What are MCP Servers?${c.reset}
+  They're plugins that give Claude Code new abilities:
+  ${c.green}*${c.reset} Query databases directly
+  ${c.green}*${c.reset} Interact with APIs (GitHub, Jira, Slack, etc.)
+  ${c.green}*${c.reset} Access Figma designs
+  ${c.green}*${c.reset} Search documentation
+  ${c.green}*${c.reset} And much more!
+
+${c.yellow}How to use them:${c.reset}
+  MCP servers are configured in your Claude Code settings.
+  Once connected, Claude can use them automatically.
+
+${c.yellow}Example — Figma integration:${c.reset}
+  With the Figma MCP server connected, you can say:
+  ${c.green}"Look at this Figma design and build it in React"${c.reset}
+  Claude fetches the design, reads the layout, colors,
+  and typography, then generates matching code.
+
+${c.magenta}MCP turns Claude Code from a coding assistant into a
+full development platform that connects to your entire workflow.${c.reset}
+`,
+  },
+];
+
+async function tipsAndTutorials(rl) {
+  clearScreen();
+  console.log(`\n${c.bgCyan}${c.bold} TIPS & TUTORIALS ${c.reset}\n`);
+  console.log(`${c.dim}  Pro tips with step-by-step walkthroughs to level up your workflow.${c.reset}\n`);
+
+  const categories = [...new Set(tips.map((t) => t.category))];
+  for (const cat of categories) {
+    console.log(`  ${c.underline}${c.bold}${cat}${c.reset}`);
+    const catTips = tips.filter((t) => t.category === cat);
+    for (let i = 0; i < catTips.length; i++) {
+      const globalIdx = tips.indexOf(catTips[i]) + 1;
+      console.log(`    ${c.yellow}${String(globalIdx).padStart(2)}${c.reset}  ${catTips[i].title}`);
+    }
+    console.log();
+  }
+
+  console.log(`  ${c.dim}Enter a number to read a tip, or press Enter to go back.${c.reset}\n`);
+
+  const choice = (await ask(rl, `${c.cyan}${c.bold}  Select a tip (1-${tips.length}): ${c.reset}`)).trim();
+
+  const num = parseInt(choice, 10);
+  if (num >= 1 && num <= tips.length) {
+    await showTip(rl, num - 1);
+  }
+}
+
+async function showTip(rl, index) {
+  const tip = tips[index];
+  clearScreen();
+
+  console.log(
+    `\n${c.bgCyan}${c.bold} TIP ${c.reset} ${c.bold}${c.cyan}${tip.title}${c.reset}`
+  );
+  console.log(`${c.dim}  Category: ${tip.category}${c.reset}`);
+
+  console.log(tip.tutorial);
+
+  const nextIdx = index + 1;
+  if (nextIdx < tips.length) {
+    const action = (
+      await ask(rl, `${c.cyan}  Press Enter for next tip, or 'b' for back: ${c.reset}`)
+    ).trim().toLowerCase();
+    if (action !== "b") {
+      await showTip(rl, nextIdx);
+      return;
+    }
+  } else {
+    await ask(rl, `${c.cyan}  That's all the tips! Press Enter to go back...${c.reset}`);
+  }
 }
 
 // ─── Playground ─────────────────────────────────────────────────────
@@ -843,6 +1137,8 @@ async function main() {
 
     if (result === "quit") {
       running = false;
+    } else if (result === "tips") {
+      await tipsAndTutorials(rl);
     } else if (result === "playground") {
       await playground(rl);
     } else if (result === "ideas") {

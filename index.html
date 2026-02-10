@@ -720,6 +720,59 @@
       margin-top: 0.75rem;
     }
 
+    /* ─── Tip Cards ──────────────────────────────────────────── */
+    .tip-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-warm);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .tip-card:hover {
+      border-color: var(--blue);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-1px);
+    }
+
+    .tip-icon {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-soft);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tip-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .tip-category {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .tip-detail-content {
+      margin-top: 1.5rem;
+    }
+
     /* ─── Animations ─────────────────────────────────────────── */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(12px); }
@@ -784,6 +837,7 @@
   <!-- Nav Tabs -->
   <nav class="nav-tabs" id="navTabs">
     <button class="nav-tab active" data-view="lessons">Lessons</button>
+    <button class="nav-tab" data-view="tips">Tips & Tutorials</button>
     <button class="nav-tab" data-view="playground">Playground</button>
     <button class="nav-tab" data-view="ideas">Impact Ideas</button>
   </nav>
@@ -793,6 +847,14 @@
 
   <!-- ═══ Lesson Detail ═══ -->
   <div class="lesson-view" id="lessonDetail"></div>
+
+  <!-- ═══ Tips & Tutorials View ═══ -->
+  <div class="view" id="view-tips">
+    <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Tips & Tutorials</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Pro tips with step-by-step walkthroughs to level up your Claude Code workflow.</p>
+    <div id="tipsContainer"></div>
+    <div class="lesson-view" id="tipDetail"></div>
+  </div>
 
   <!-- ═══ Playground View ═══ -->
   <div class="view" id="view-playground">
@@ -1027,6 +1089,169 @@ const lessons = [
   },
 ];
 
+const tipsData = [
+  {
+    id: "drag-drop", title: "Drag & Drop Images Into Your Terminal", category: "Hidden Gems",
+    terminal: {
+      heading: "Drag & Drop Images Into Claude Code",
+      body: [
+        { type: "text", text: "Did you know? You can drag and drop image files directly into Claude Code's terminal input!" },
+        { type: "heading", text: "How It Works" },
+        { type: "bullet", text: "1. Start Claude Code in your terminal" },
+        { type: "bullet", text: "2. Grab any image file (screenshot, mockup, diagram, photo)" },
+        { type: "bullet", text: "3. Drag it from Finder / file manager into the terminal window" },
+        { type: "bullet", text: "4. The file path gets pasted automatically" },
+        { type: "bullet", text: "5. Claude Code reads the image and understands it visually!" },
+        { type: "heading", text: "Try These" },
+        { type: "cmd", text: '"What\'s wrong with this layout?" + [drag screenshot of UI bug]' },
+        { type: "cmd", text: '"Build this UI in React" + [drag design mockup]' },
+        { type: "cmd", text: '"Turn this diagram into a database schema" + [drag whiteboard photo]' },
+        { type: "cmd", text: '"Help me fix this error" + [drag error screenshot]' },
+        { type: "note", text: "This is incredibly powerful for bridging the gap between visual ideas and working code." },
+      ],
+    },
+  },
+  {
+    id: "multi-turn", title: "Iterate Like a Conversation", category: "Hidden Gems",
+    terminal: {
+      heading: "Conversational Iteration",
+      body: [
+        { type: "text", text: "Claude Code remembers everything in your session. Use that to iterate naturally!" },
+        { type: "heading", text: "Example Conversation Flow" },
+        { type: "cmd", text: '"Create a login form component"' },
+        { type: "text", text: "  Claude builds the form..." },
+        { type: "cmd", text: '"Add email validation"' },
+        { type: "text", text: "  Claude updates the same component..." },
+        { type: "cmd", text: '"Now add a password strength meter"' },
+        { type: "text", text: "  Claude adds it, keeping previous changes..." },
+        { type: "cmd", text: '"Make it match our existing dark theme"' },
+        { type: "text", text: "  Claude reads your theme and applies it..." },
+        { type: "heading", text: "Tips for Great Iteration" },
+        { type: "bullet", text: "Start broad, then refine with follow-ups" },
+        { type: "bullet", text: 'Say "undo that last change" if something isn\'t right' },
+        { type: "bullet", text: 'Reference previous work: "update the component we just made"' },
+        { type: "bullet", text: "Use /compact if the conversation gets very long" },
+      ],
+    },
+  },
+  {
+    id: "claude-md", title: "Project Memory with CLAUDE.md", category: "Power User",
+    terminal: {
+      heading: "CLAUDE.md — Persistent Project Context",
+      body: [
+        { type: "text", text: "Create a CLAUDE.md file in your project root to give Claude Code persistent context about your project!" },
+        { type: "heading", text: "What to Put in CLAUDE.md" },
+        { type: "bullet", text: "Project architecture overview" },
+        { type: "bullet", text: "Coding conventions and style preferences" },
+        { type: "bullet", text: "Key file locations and their purposes" },
+        { type: "bullet", text: "Build and test commands" },
+        { type: "bullet", text: "Things to avoid or watch out for" },
+        { type: "heading", text: "Example" },
+        { type: "cmd", text: "# My Project" },
+        { type: "cmd", text: "- React frontend in /src, Express backend in /api" },
+        { type: "cmd", text: "- Use TypeScript strict mode" },
+        { type: "cmd", text: "- Tests go next to source files as *.test.ts" },
+        { type: "cmd", text: '- Never use "any" type' },
+        { type: "note", text: "Claude Code reads CLAUDE.md automatically every session, so it always knows your project's rules and preferences." },
+      ],
+    },
+  },
+  {
+    id: "vim-mode", title: "Keyboard Shortcuts & Vim Mode", category: "Power User",
+    terminal: {
+      heading: "Speed Up Your Workflow",
+      body: [
+        { type: "heading", text: "Essential Shortcuts" },
+        { type: "bullet", text: "Escape — Clear current input / interrupt" },
+        { type: "bullet", text: "Ctrl+C — Cancel current operation" },
+        { type: "bullet", text: "Up/Down — Navigate input history" },
+        { type: "bullet", text: "Shift+Enter — Multi-line input (newline without sending)" },
+        { type: "heading", text: "Vim Mode" },
+        { type: "text", text: "Claude Code supports Vim keybindings for text input! If you're a Vim user, this feels right at home." },
+        { type: "heading", text: "Multi-Line Input Trick" },
+        { type: "text", text: "Use Shift+Enter to write across multiple lines before sending. Great for detailed instructions with examples." },
+        { type: "note", text: "Customize keybindings with /keybindings-help" },
+      ],
+    },
+  },
+  {
+    id: "piping", title: "Unix Pipes — Claude's Secret Weapon", category: "Workflow",
+    terminal: {
+      heading: "Pipe Any Command Output to Claude",
+      body: [
+        { type: "heading", text: "Debugging" },
+        { type: "cmd", text: 'npm test 2>&1 | claude "why are these tests failing?"' },
+        { type: "cmd", text: 'python app.py 2>&1 | claude "explain this traceback"' },
+        { type: "cmd", text: 'docker logs myapp | claude "find errors in these logs"' },
+        { type: "heading", text: "Code Review" },
+        { type: "cmd", text: 'git diff | claude "review for bugs and security issues"' },
+        { type: "cmd", text: 'git log --oneline -20 | claude "summarize recent changes"' },
+        { type: "heading", text: "Understanding Code" },
+        { type: "cmd", text: 'cat schema.sql | claude "explain this database schema"' },
+        { type: "cmd", text: 'curl -s api.example.com | claude "what does this API return?"' },
+        { type: "heading", text: "Generate From Specs" },
+        { type: "cmd", text: 'cat requirements.md | claude "build this feature"' },
+        { type: "note", text: "Pipes + Claude = any command output becomes actionable." },
+      ],
+    },
+  },
+  {
+    id: "headless", title: "Headless Mode for Automation", category: "Workflow",
+    terminal: {
+      heading: "Run Claude Code Non-Interactively",
+      body: [
+        { type: "heading", text: "The --print Flag" },
+        { type: "cmd", text: 'claude --print "generate a .gitignore for a Node.js project"' },
+        { type: "text", text: "  Outputs the result directly to stdout — no interactive session needed." },
+        { type: "heading", text: "Pipe Into Files" },
+        { type: "cmd", text: 'claude --print "generate .gitignore for Node.js" > .gitignore' },
+        { type: "heading", text: "Use in Scripts" },
+        { type: "cmd", text: 'MSG=$(git diff --staged | claude --print "write a commit message")' },
+        { type: "cmd", text: 'git commit -m "$MSG"' },
+        { type: "heading", text: "Use in CI/CD" },
+        { type: "cmd", text: 'claude --print "review this PR for issues" < changes.diff' },
+        { type: "note", text: "Headless mode turns Claude Code into a building block for automated workflows." },
+      ],
+    },
+  },
+  {
+    id: "context-tricks", title: "Context Window Mastery", category: "Power User",
+    terminal: {
+      heading: "Get the Most Out of Context",
+      body: [
+        { type: "text", text: "Claude Code has a large but finite context window. Here's how to use it wisely:" },
+        { type: "heading", text: "Strategies" },
+        { type: "bullet", text: "/compact — Summarize your conversation periodically during long sessions" },
+        { type: "bullet", text: 'Be specific about files — say "look at src/auth/login.ts" instead of "look at the project"' },
+        { type: "bullet", text: "Start fresh for new tasks — don't reuse a long conversation for unrelated work" },
+        { type: "bullet", text: "Use CLAUDE.md — put recurring context there so you don't re-explain every session" },
+        { type: "bullet", text: "Break big tasks into steps — do refactoring module by module across sessions" },
+        { type: "note", text: "Treat context like memory — keep it focused on what matters now." },
+      ],
+    },
+  },
+  {
+    id: "mcp", title: "MCP Servers — Extend Claude's Powers", category: "Advanced",
+    terminal: {
+      heading: "Model Context Protocol (MCP)",
+      body: [
+        { type: "text", text: "MCP lets Claude Code connect to external tools and services as plugins!" },
+        { type: "heading", text: "What MCP Servers Can Do" },
+        { type: "bullet", text: "Query databases directly" },
+        { type: "bullet", text: "Interact with APIs (GitHub, Jira, Slack, etc.)" },
+        { type: "bullet", text: "Access Figma designs" },
+        { type: "bullet", text: "Search documentation" },
+        { type: "bullet", text: "And much more!" },
+        { type: "heading", text: "Example — Figma Integration" },
+        { type: "text", text: "With the Figma MCP server connected:" },
+        { type: "cmd", text: '"Look at this Figma design and build it in React"' },
+        { type: "text", text: "  Claude fetches the design, reads layout, colors, and typography, then generates matching code." },
+        { type: "note", text: "MCP turns Claude Code from a coding assistant into a full development platform that connects to your entire workflow." },
+      ],
+    },
+  },
+];
+
 const playgroundChallenges = [
   { title: "Hello World API", desc: "Create a simple Express.js API with a GET /hello endpoint, then add a POST /greet endpoint that takes a name.", prompt: '"Create a simple Express.js API with a GET /hello endpoint that returns { message: \'Hello, World!\' }"' },
   { title: "Bug Hunt", desc: "Create a file with an intentional bug (off-by-one, null reference, etc.), then ask Claude to find it.", prompt: '"There\'s a bug in this file. Can you find it?"' },
@@ -1144,6 +1369,55 @@ function renderTerminal(terminal) {
         ${body}
       </div>
     </div>`;
+}
+
+// ─── Tips Rendering ──────────────────────────────────────────────────
+function renderTips() {
+  const container = document.getElementById("tipsContainer");
+  let html = "";
+  let lastCat = "";
+  for (let i = 0; i < tipsData.length; i++) {
+    const tip = tipsData[i];
+    if (tip.category !== lastCat) {
+      lastCat = tip.category;
+      html += `<div class="category-title">${tip.category}</div>`;
+    }
+    html += `
+      <div class="tip-card animate-in" onclick="openTip('${tip.id}')">
+        <div class="tip-icon">${i + 1}</div>
+        <div>
+          <div class="tip-title">${tip.title}</div>
+          <div class="tip-category">${tip.category}</div>
+        </div>
+      </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function openTip(id) {
+  const tip = tipsData.find(t => t.id === id);
+  if (!tip) return;
+
+  const container = document.getElementById("tipsContainer");
+  const detail = document.getElementById("tipDetail");
+
+  container.style.display = "none";
+  detail.className = "lesson-view active animate-in";
+
+  detail.innerHTML = `
+    <div class="lesson-header">
+      <button class="back-btn" onclick="closeTip()">&larr; Back to Tips</button>
+      <h2>${tip.title}</h2>
+      <div class="lesson-category">${tip.category}</div>
+    </div>
+    ${renderTerminal(tip.terminal)}`;
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function closeTip() {
+  document.getElementById("tipDetail").className = "lesson-view";
+  document.getElementById("tipsContainer").style.display = "block";
 }
 
 // ─── Lesson Detail & Quiz ────────────────────────────────────────────
@@ -1293,6 +1567,7 @@ document.querySelectorAll(".nav-tab").forEach(tab => {
 // ─── Init ────────────────────────────────────────────────────────────
 renderStatusBar();
 renderLessons();
+renderTips();
 renderPlayground();
 renderIdeas();
 </script>
