@@ -21,7 +21,7 @@ An interactive learning experience that teaches you how to use **Claude Code** t
 
 **[Launch Claude Learn in your browser](https://rdsciv.github.io/ClaudeLearn/)** — no install required.
 
-## Quick Start (Terminal)
+## Recommended learning experience - ClaudeLearn in your terminal!
 
 ```bash
 git clone https://github.com/rdsciv/ClaudeLearn.git
