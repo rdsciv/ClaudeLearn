@@ -1,6 +1,6 @@
 # Claude Learn
 
-An interactive terminal-based learning experience that teaches you how to use **Claude Code** to build software that makes the world a better place.
+An interactive learning experience that teaches you how to use **Claude Code** to build software that makes the world a better place. Choose between a **terminal** or **web** experience.
 
 <pre>
     ╔══════════════════════════════════════════════════════════╗
@@ -22,14 +22,18 @@ An interactive terminal-based learning experience that teaches you how to use **
 ```bash
 git clone https://github.com/rdsciv/ClaudeLearn.git
 cd ClaudeLearn
-node learn.mjs
+npm start
 ```
 
+You'll be prompted to choose your experience:
+
+| Option | Command | Description |
+|--------|---------|-------------|
+| **Choose at launch** | `npm start` | Pick terminal or web when you run it |
+| **Terminal** | `npm run terminal` | Interactive CLI with ANSI colors, right in your terminal |
+| **Web** | `npm run web` | Beautiful browser experience with Claude's brand styling |
+
 No dependencies required — just Node.js (v18+).
-
-### Web Version
-
-Open `index.html` in your browser for a beautifully styled web experience with Claude's brand colors, typography, and interactive quizzes — identical for everyone.
 
 ## What's Inside
 
@@ -52,6 +56,7 @@ Open `index.html` in your browser for a beautifully styled web experience with C
 - **XP & Leveling** — Earn points, level up, get bonus XP for perfect scores
 - **Badges** — Unlock titles: Launcher, Builder, Debugger, Architect, Changemaker
 - **Learning Streaks** — Track consecutive days of learning
+- **Tips & Tutorials** — 8 pro tips with step-by-step walkthroughs (drag & drop images, CLAUDE.md, pipes, MCP, and more)
 - **Playground** — Hands-on challenges to try with Claude Code
 - **Impact Ideas** — Real project ideas for building software that helps people
 - **Persistent Progress** — Your XP, level, and badges save between sessions
@@ -64,11 +69,16 @@ Open `index.html` in your browser for a beautifully styled web experience with C
 ## Usage
 
 ```bash
-# Start the learning experience
-node learn.mjs
+# Launch the chooser
+npm start
 
-# Navigate with keyboard:
+# Or go directly to a version
+npm run terminal     # Terminal experience
+npm run web          # Web experience
+
+# Terminal navigation:
 #   01-08  Select a lesson
+#   T      Tips & Tutorials
 #   P      Playground challenges
 #   I      Impact project ideas
 #   Q      Quit
