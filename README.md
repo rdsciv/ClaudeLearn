@@ -17,7 +17,11 @@ An interactive learning experience that teaches you how to use **Claude Code** t
     ╚══════════════════════════════════════════════════════════╝
 </pre>
 
-## Quick Start
+## Try It Now
+
+**[Launch Claude Learn in your browser](https://rdsciv.github.io/ClaudeLearn/)** — no install required.
+
+## Quick Start (Terminal)
 
 ```bash
 git clone https://github.com/rdsciv/ClaudeLearn.git
@@ -32,6 +36,7 @@ You'll be prompted to choose your experience:
 | **Choose at launch** | `npm start` | Pick terminal or web when you run it |
 | **Terminal** | `npm run terminal` | Interactive CLI with ANSI colors, right in your terminal |
 | **Web** | `npm run web` | Beautiful browser experience with Claude's brand styling |
+| **Live site** | [rdsciv.github.io/ClaudeLearn](https://rdsciv.github.io/ClaudeLearn/) | Use it right away — nothing to install |
 
 No dependencies required — just Node.js (v18+).
 
