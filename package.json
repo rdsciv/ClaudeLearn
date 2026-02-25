@@ -2,12 +2,11 @@
   "name": "claude-learn",
   "version": "1.0.0",
   "description": "An interactive way to learn Claude Code for building world-changing software",
-  "main": "learn.mjs",
+  "main": "start.mjs",
   "type": "module",
   "scripts": {
-    "start": "node learn.mjs",
-    "lesson": "node learn.mjs --lesson",
-    "playground": "node playground.mjs",
-    "projects": "node projects.mjs"
+    "start": "node start.mjs",
+    "terminal": "node learn.mjs",
+    "web": "node -e \"import('child_process').then(c=>c.execSync('open index.html'))\""
   }
 }
